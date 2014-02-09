@@ -13,6 +13,7 @@
 *.dylib
 
 # Executables
+/paydate_calculator
 *.exe
 *.out
 *.app
@@ -22,9 +23,14 @@
 # http://www.gnu.org/software/automake
 
 Makefile.in
+Makefile
+/configure.scan
+/config.*
+/autoscan.log
 
 # http://www.gnu.org/software/autoconf
 
+/.deps
 /autom4te.cache
 /aclocal.m4
 /compile
