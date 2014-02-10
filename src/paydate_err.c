@@ -1,6 +1,6 @@
-#include "../include/paydate_err.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include "paydate_err.h"
 
 paydate_err_s *paydate_err_new(int code, char const *name, char const *description)
 {

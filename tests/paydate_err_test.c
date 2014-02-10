@@ -1,8 +1,8 @@
 #include <glib.h>
-#include "../include/paydate_err.h"
+#include "paydate_err.h"
 
 typedef struct {
-  paydate_err_s *err
+  paydate_err_s *err;
 } efixture;
 
 void paydate_err_setup(efixture *ef, gconstpointer test_data)
