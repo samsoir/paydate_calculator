@@ -4,6 +4,9 @@
 
 #include "paydate_err.h"
 
+typedef int paydate_frequency;
+extern const paydate_frequency PCPaydateFrequency_Week;
+
 typedef struct paydate_frequency_s {
   int interval;
   int unit;

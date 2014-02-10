@@ -6,9 +6,12 @@ paydate_err_s *paydate_err_new(int code, char const *name, char const *descripti
 {
   paydate_err_s *paydate_err = malloc(sizeof(paydate_err_s));
 
-  paydate_err->code = code;
-  asprintf(&(paydate_err->name), "%s", name);
-  asprintf(&(paydate_err->description), "%s", description);
+  if (paydate_err != NULL)
+  {
+    paydate_err->code = code;
+    asprintf(&(paydate_err->name), "%s", name);
+    asprintf(&(paydate_err->description), "%s", description);
+  }
 
   return paydate_err;
 }
