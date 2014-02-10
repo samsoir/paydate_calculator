@@ -6,6 +6,8 @@ AC_CONFIG_SRCDIR([config.h.in])
 AC_CONFIG_HEADERS([config.h])
 AC_CONFIG_MACRO_DIR([m4])
 
+PKG_PROG_PKG_CONFIG
+
 LT_INIT
 
 # Checks for programs.
