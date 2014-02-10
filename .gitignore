@@ -1,10 +1,12 @@
 # Object files
 *.o
 *.ko
+*.lo
 
 # Libraries
 *.lib
 *.a
+*.la
 
 # Shared objects (inc. Windows DLLs)
 *.dll
@@ -30,6 +32,10 @@ Makefile
 
 # http://www.gnu.org/software/autoconf
 
+/libtool
+/ltmain.sh
+/m4
+/.libs
 /.deps
 /autom4te.cache
 /aclocal.m4
