@@ -4,13 +4,16 @@
 #include "paydate_frequency.h"
 #include "paydate_err.h"
 
+#define PC_FREQUENCY_INTERVAL_MAX 53
+#define PC_FREQUENCY_INTERVAL_MIN 0
+
 const paydate_frequency PCPaydateFrequency_Week = 1;
 
 paydate_frequency_s *paydate_frequency_new(int interval, int unit, char const *starting_date_string)
 {
   paydate_frequency_s *paydate_frequency = malloc(sizeof(paydate_frequency_s));
 
-  if (paydate_frequency != NULL)
+  if (paydate_frequency)
   {
     paydate_frequency->interval = interval;
     paydate_frequency->unit     = unit;
@@ -20,9 +23,21 @@ paydate_frequency_s *paydate_frequency_new(int interval, int unit, char const *s
   return paydate_frequency;
 }
 
+paydate_frequency_s *paydate_frequency_copy(paydate_frequency_s *paydate_frequency)
+{
+  paydate_frequency_s *copy = NULL;
+
+  if (paydate_frequency)
+  {
+    copy = paydate_frequency_new(paydate_frequency->interval, paydate_frequency->unit, paydate_frequency->starting_date_string);
+  }
+
+  return copy;
+}
+
 void paydate_frequency_free(paydate_frequency_s *paydate_frequency)
 {
-  if (paydate_frequency != NULL)
+  if (paydate_frequency)
   {
     if (paydate_frequency->starting_date_string)
     {
@@ -66,9 +81,18 @@ int paydate_frequency_validate(paydate_frequency_s *paydate_frequency, paydate_e
   return valid;
 }
 
+void paydate_frequency_set_starting_date_string(paydate_frequency_s *paydate_frequency, char const *starting_date_string)
+{
+  if (paydate_frequency && (paydate_frequency->starting_date_string != starting_date_string))
+  {
+    free(paydate_frequency->starting_date_string);
+    asprintf(&(paydate_frequency->starting_date_string), "%s", starting_date_string);
+  }
+}
+
 int paydate_frequency_range_valid(int interval)
 {
-  return (interval > 0 && interval < 53);
+  return (interval > PC_FREQUENCY_INTERVAL_MIN && interval < PC_FREQUENCY_INTERVAL_MAX);
 }
 
 int paydate_frequency_unit_valid(int unit)

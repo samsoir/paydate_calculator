@@ -6,7 +6,7 @@ paydate_err_s *paydate_err_new(int code, char const *name, char const *descripti
 {
   paydate_err_s *paydate_err = malloc(sizeof(paydate_err_s));
 
-  if (paydate_err != NULL)
+  if (paydate_err)
   {
     paydate_err->code = code;
     asprintf(&(paydate_err->name), "%s", name);
@@ -18,7 +18,7 @@ paydate_err_s *paydate_err_new(int code, char const *name, char const *descripti
 
 void paydate_err_free(paydate_err_s *paydate_err)
 {
-  if (paydate_err != NULL)
+  if (paydate_err)
   {
     free(paydate_err->name);
     free(paydate_err->description);

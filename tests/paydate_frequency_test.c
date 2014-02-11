@@ -23,6 +23,16 @@ void check_new(paydate_frequency_s const *frequency)
   g_assert_cmpstr(frequency->starting_date_string, ==, "2014/01/01");
 }
 
+void check_copy(paydate_frequency_s const *frequency)
+{
+  paydate_frequency_s *copy = paydate_frequency_copy(frequency);
+  g_assert(&copy != &frequency);
+  g_assert_cmpint(copy->interval, ==, frequency->interval);
+  g_assert_cmpint(copy->unit, ==, frequency->unit);
+  g_assert(&(copy->starting_date_string) != &(frequency->starting_date_string));
+  g_assert_cmpstr(copy->starting_date_string, ==, frequency->starting_date_string);
+}
+
 void check_validate_ok(paydate_frequency_s *frequency)
 {
   paydate_err_s *err = NULL;
@@ -93,9 +103,21 @@ void check_validate_fail(paydate_frequency_s *frequency)
   reset_err(&err);
 }
 
+void check_set_starting_date_string(paydate_frequency_s *frequency)
+{
+  char *new_string = "test_new_string";
+  paydate_frequency_set_starting_date_string(frequency, new_string);
+  g_assert_cmpstr(new_string, ==, frequency->starting_date_string);
+}
+
 void test_new(ffixture *ff, gconstpointer ignored)
 {
   check_new(ff->frequency);
+}
+
+void test_copy(ffixture *ff, gconstpointer ignored)
+{
+  check_copy(ff->frequency);
 }
 
 void test_validate_ok(ffixture *ff, gconstpointer ignored)
@@ -108,11 +130,18 @@ void test_validate_fail(ffixture *ff, gconstpointer ignored)
   check_validate_fail(ff->frequency);
 }
 
+void test_set_starting_date_string(ffixture *ff, gconstpointer ignored)
+{
+  check_set_starting_date_string(ff->frequency);
+}
+
 int main (int argc, char **argv)
 {
   g_test_init(&argc, &argv, NULL);
   g_test_add("/paydate_frequency/new test", ffixture, NULL, paydate_frequency_setup, test_new, paydate_frequency_teardown);
+  g_test_add("/paydate_frequency/copy test", ffixture, NULL, paydate_frequency_setup, test_copy, paydate_frequency_teardown);
   g_test_add("/paydate_frequency/validate_ok test", ffixture, NULL, paydate_frequency_setup, test_validate_ok, paydate_frequency_teardown);
   g_test_add("/paydate_frequency/validate_fail test", ffixture, NULL, paydate_frequency_setup, test_validate_fail, paydate_frequency_teardown);
+  g_test_add("/paydate_frequency/set_starting_date_string test", ffixture, NULL, paydate_frequency_setup, test_set_starting_date_string, paydate_frequency_teardown);
   return g_test_run();
 }
