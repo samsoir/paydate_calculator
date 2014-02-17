@@ -23,16 +23,22 @@ paydate_frequency_s *paydate_frequency_new(int interval, int unit, char const *s
   return paydate_frequency;
 }
 
-paydate_frequency_s *paydate_frequency_copy(paydate_frequency_s *paydate_frequency)
+int paydate_frequency_copy(paydate_frequency_s **destination, paydate_frequency_s *source)
 {
-  paydate_frequency_s *copy = NULL;
+  int result = 0;
 
-  if (paydate_frequency)
+  if (destination == NULL)
   {
-    copy = paydate_frequency_new(paydate_frequency->interval, paydate_frequency->unit, paydate_frequency->starting_date_string);
+    return result;
   }
 
-  return copy;
+  if (source)
+  {
+    *destination = paydate_frequency_new(source->interval, source->unit, source->starting_date_string);
+    result = 1;
+  }
+
+  return result;
 }
 
 void paydate_frequency_free(paydate_frequency_s *paydate_frequency)
@@ -51,7 +57,7 @@ int paydate_frequency_validate(paydate_frequency_s *paydate_frequency, paydate_e
 {
   int valid = 0;
   int err_code = 1000;
-  paydate_err_s *error;
+  paydate_err_s *error = NULL;
 
   if (paydate_frequency)
   {

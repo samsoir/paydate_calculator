@@ -25,12 +25,21 @@ void check_new(paydate_frequency_s const *frequency)
 
 void check_copy(paydate_frequency_s const *frequency)
 {
-  paydate_frequency_s *copy = paydate_frequency_copy(frequency);
-  g_assert(&copy != &frequency);
+  paydate_frequency_s *copy = NULL;
+  int result = paydate_frequency_copy(&copy, frequency);
+  g_assert_cmpint(result, ==, 1);
+  g_assert(copy != frequency);
   g_assert_cmpint(copy->interval, ==, frequency->interval);
   g_assert_cmpint(copy->unit, ==, frequency->unit);
   g_assert(&(copy->starting_date_string) != &(frequency->starting_date_string));
   g_assert_cmpstr(copy->starting_date_string, ==, frequency->starting_date_string);
+}
+
+void check_bad_copy(paydate_frequency_s const *frequency)
+{
+  void *bad_ptr = NULL;
+  int result = paydate_frequency_copy(bad_ptr, frequency);
+  g_assert_cmpint(result, ==, 0);
 }
 
 void check_validate_ok(paydate_frequency_s *frequency)
@@ -120,6 +129,11 @@ void test_copy(ffixture *ff, gconstpointer ignored)
   check_copy(ff->frequency);
 }
 
+void test_bad_copy(ffixture *ff, gconstpointer ignored)
+{
+  check_bad_copy(ff->frequency);
+}
+
 void test_validate_ok(ffixture *ff, gconstpointer ignored)
 {
   check_validate_ok(ff->frequency);
@@ -140,6 +154,7 @@ int main (int argc, char **argv)
   g_test_init(&argc, &argv, NULL);
   g_test_add("/paydate_frequency/new test", ffixture, NULL, paydate_frequency_setup, test_new, paydate_frequency_teardown);
   g_test_add("/paydate_frequency/copy test", ffixture, NULL, paydate_frequency_setup, test_copy, paydate_frequency_teardown);
+  g_test_add("/paydate_frequency/bad_copy test", ffixture, NULL, paydate_frequency_setup, test_bad_copy, paydate_frequency_teardown);
   g_test_add("/paydate_frequency/validate_ok test", ffixture, NULL, paydate_frequency_setup, test_validate_ok, paydate_frequency_teardown);
   g_test_add("/paydate_frequency/validate_fail test", ffixture, NULL, paydate_frequency_setup, test_validate_fail, paydate_frequency_teardown);
   g_test_add("/paydate_frequency/set_starting_date_string test", ffixture, NULL, paydate_frequency_setup, test_set_starting_date_string, paydate_frequency_teardown);
